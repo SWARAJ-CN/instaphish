@@ -12,9 +12,17 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 const server = http.createServer(app);
+const BACKEND_URL = process.env.BACKEND_URL || 'https://instaphish-2nrr.onrender.com';
+const FRONTEND_URLS = [
+  'https://phishingback.vercel.app',
+  'https://instaphish-eta.vercel.app',
+  BACKEND_URL,
+];
+
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: FRONTEND_URLS,
+    credentials: true,
   },
 });
 
@@ -30,6 +38,19 @@ if (!mongoUri) {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (FRONTEND_URLS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  }
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
 app.use(session({
   secret: process.env.SESSION_SECRET || 'change_this_secret',
   resave: false,
