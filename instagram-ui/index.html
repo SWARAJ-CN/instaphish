@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./assets/instagram.png" type="image/x-icon">
+  <title>Instagram</title>
+  <style>
+    /* --- Design System & Reset --- */
+    :root {
+      --bg-dark: #121212;
+      --bg-card: #1c1c1e;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a8a8a8;
+      --link-blue: #0095f6;
+      --btn-blue: #005c9e; /* Disabled / default dark blue look in the screenshot */
+      --btn-hover: #1877f2;
+      --border-color: #363636;
+      --input-bg: #1c1c1e;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: var(--font-stack);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- Layout Container --- */
+    .wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      width: 100%;
+      max-width: 440px;
+      margin-top: 20px;
+    }
+
+    /* --- Left Hero Section (Desktop Only) --- */
+    .left-hero {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding-right: 48px;
+    }
+
+    .logo-mark {
+      margin-bottom: 40px;
+    }
+
+    .hero-title {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 40px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(45deg, #ff7a00, #ff0169, #d300c5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .phone-mock {
+      width: 100%;
+      max-width: 380px;
+      height: 380px;
+      background-image: url('./assets/spam.webp');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* --- Right Auth Panel --- */
+    .auth-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .auth-card {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    /* Centralized Logo on Mobile */
+    .mobile-logo-container {
+      margin-bottom: 48px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .auth-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+
+    /* --- Form Elements --- */
+    .login-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .login-form input {
+      width: 100%;
+      height: 50px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-primary);
+      padding: 14px 16px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .login-form input:focus {
+      border-color: #a8a8a8;
+    }
+
+    .login-form input::placeholder {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* --- Buttons --- */
+    .btn {
+      width: 100%;
+      height: 44px;
+      border: none;
+      border-radius: 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn.primary {
+      background-color: var(--btn-blue);
+      color: #ffffff;
+      margin-top: 12px;
+    }
+
+    .btn.primary:hover {
+      background-color: var(--link-blue);
+    }
+
+    .forgot {
+      color: var(--text-primary);
+      font-size: 14px;
+      text-decoration: none;
+      font-weight: 500;
+      margin: 28px 0;
+      display: inline-block;
+    }
+
+    .forgot:hover {
+      opacity: 0.8;
+    }
+
+    /* --- OAuth & Bottom Actions --- */
+    .oauth {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .btn.fb {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn.fb svg {
+      fill: #1877f2;
+    }
+
+    .btn.outline {
+      background-color: transparent;
+      border: 1px solid var(--link-blue);
+      color: var(--link-blue);
+    }
+
+    .meta-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+    }
+
+    .meta-brand svg {
+      fill: var(--text-secondary);
+    }
+
+    /* --- Global Footer --- */
+    .site-footer {
+      width: 100%;
+      padding: 24px 16px;
+      border-top: 1px solid #262626;
+      background-color: var(--bg-dark);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      font-size: 12px;
+      text-decoration: none;
+      font-weight: 400;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-copyright {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 12px;
+      margin-top: 16px;
+    }
+
+    /* --- Responsive Media Queries --- */
+    @media (min-width: 875px) {
+      .layout {
+        grid-template-columns: 1.1fr 0.9fr;
+        max-width: 935px;
+        align-items: center;
+      }
+
+      .left-hero {
+        display: flex;
+      }
+
+      .mobile-logo-container {
+        display: none; /* Hide top logo, it shifts to left section */
+      }
+
+      .auth-panel {
+        border-left: 1px solid #262626;
+        padding-left: 48px;
+        align-items: flex-start;
+      }
+
+      .auth-card {
+        padding: 0;
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="wrapper">
+    <section class="layout">
+      
+      <div class="left-hero">
+        <div class="logo-mark">
+          <img src="./assets/instagram.png" style="width: 100px;">
+        </div>
+        <h1 class="hero-title">See everyday moments from<br>your <span>close friends.</span></h1>
+        <div class="phone-mock"></div>
+      </div>
+
+      <aside class="auth-panel">
+        <div class="auth-card">
+          
+          <div class="mobile-logo-container">
+            <img src="./assets/instagram.png" alt="" style="width: 100px;">
+          </div>
+
+          <h3 class="auth-title">Log into Instagram</h3>
+          
+          <form class="login-form" action="/login" method="POST">
+            <div class="input-wrapper">
+              <input type="text" aria-label="Phone number, username, or email" name="username" placeholder="Mobile number, username or email" required>
+            </div>
+            <div class="input-wrapper">
+              <input type="password" aria-label="Password" name="password" placeholder="Password" required>
+            </div>
+            
+            <button class="btn primary" type="submit">Log in</button>
+            
+            <div>
+              <a class="forgot" href="#">Forgot password?</a>
+            </div>
+
+            <div class="oauth">
+              <button class="btn fb" type="button">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Log in with Facebook
+              </button>
+              <button class="btn outline" type="button">Create new account</button>
+            </div>
+          </form>
+
+          <div class="meta-brand">
+            <img src="./assets/meta.png" alt="" style="width: 20px;">
+            Meta
+          </div>
+
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="footer-links">
+      <a href="#">Meta</a>
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Jobs</a>
+      <a href="#">Help</a>
+      <a href="#">API</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Locations</a>
+      <a href="#">Popular</a>
+      <a href="#">Instagram Lite</a>
+      <a href="#">Meta AI</a>
+      <a href="#">Threads</a>
+      <a href="#">Contact Uploading & Non-Users</a>
+      <a href="#">Meta Verified</a>
+    </nav>
+    <div class="footer-copyright">
+      English <span>▼</span> © 2026 Instagram from Meta
+    </div>
+  </footer>
+
+</body>
+</html>

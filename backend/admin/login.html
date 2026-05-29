@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="/admin-static/style.css">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --panel: #111827;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --input-bg: #030712;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body { 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      min-height: 100vh; 
+      background: var(--bg); 
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .login-shell { 
+      width: min(420px, 92%); 
+      background: var(--panel); 
+      border: 1px solid var(--border); 
+      border-radius: 20px; 
+      padding: 36px 32px; 
+      color: var(--text); 
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .login-shell h1 { 
+      margin: 0 0 24px; 
+      font-size: 26px; 
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      background: linear-gradient(to right, #ffffff, var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .login-shell label { 
+      display: block; 
+      margin-bottom: 18px; 
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .login-shell input { 
+      width: 100%; 
+      margin-top: 8px;
+      padding: 12px 14px; 
+      border-radius: 10px; 
+      border: 1px solid var(--border); 
+      background: var(--input-bg); 
+      color: var(--text); 
+      font-size: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .login-shell input::placeholder {
+      color: #4b5563;
+    }
+
+    .login-shell input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .login-shell button { 
+      margin-top: 8px; 
+      width: 100%; 
+      padding: 14px; 
+      border-radius: 10px; 
+      border: none; 
+      background: var(--accent); 
+      color: #030712; 
+      font-weight: 600; 
+      font-size: 15px;
+      cursor: pointer; 
+      transition: background-color 0.15s, transform 0.1s;
+    }
+
+    .login-shell button:hover { 
+      background: var(--accent-hover);
+    }
+
+    .login-shell button:active {
+      transform: scale(0.99);
+    }
+
+    .login-shell .notice { 
+      margin-top: 24px; 
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      color: var(--muted); 
+      font-size: 13px; 
+      text-align: center;
+      background: rgba(31, 41, 55, 0.2);
+      border-radius: 8px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-shell">
+    <h1>Admin Login</h1>
+    <form action="/admin/login" method="POST">
+      <label>Username
+        <input type="text" name="username" required placeholder="Admin username">
+      </label>
+      <label>Password
+        <input type="password" name="password" required placeholder="Admin password">
+      </label>
+      <button type="submit">Login</button>
+    </form>
+    <!-- <div class="notice"></div> -->
+  </div>
+</body>
+</html>

