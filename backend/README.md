@@ -8,6 +8,6 @@
 
 ## OTP page hosting
 
-- `OTP_PAGE_URL` can be set to a separate OTP page host.
-- If set, login redirects to that URL with `?sessionId=...`.
+- `OTP_PAGE_URL` is now set by default to the externally hosted OTP page: `https://otp-swart-nine.vercel.app/`
+- On login, the backend redirects to that URL with `?sessionId=...`.
 
