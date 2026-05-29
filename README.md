@@ -23,3 +23,13 @@ against these types of attacks.
 
 By downloading, viewing, or utilizing any part of this repository, you agree to these terms
 and assume full responsibility for your actions.
+
+
+ -----------Dependency Breakdownexpress----------------
+ 
+The web framework for routing and handling requests.
+mongoose:--- The Object Data Modeling (ODM) library to connect and interact with MongoDB.
+dotenv:----- Loads environment variables from a .env file for configuration.
+express-session:- Manages user sessions and login states.
+bcryptjs: ------- Hashes and compares passwords securely.
+socket.io:------- Enables real-time, bi-directional communication (often used to stream captured inputs instantly).
